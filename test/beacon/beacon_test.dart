@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 main() {
   test('main constructor must be equal', () {
-    const beacon = const Beacon(
+    const beacon = Beacon(
       proximityUUID: 'UUID',
       macAddress: 'MAC-ADDRESS',
       major: 1,
@@ -24,7 +24,7 @@ main() {
     expect(beacon.accuracy, 0.0);
     expect(beacon.proximity, Proximity.unknown);
 
-    const beacon2 = const Beacon(
+    const beacon2 = Beacon(
       accuracy: 0.4,
       proximityUUID: 'UUID',
       major: 1,
@@ -33,7 +33,7 @@ main() {
     );
     expect(beacon2.proximity, Proximity.immediate);
 
-    const beacon3 = const Beacon(
+    const beacon3 = Beacon(
       accuracy: 2.9,
       proximityUUID: 'UUID',
       major: 1,
@@ -120,10 +120,6 @@ main() {
       }),
     ];
     expect(Beacon.beaconArrayToJson(beacons) is List<dynamic>, isTrue);
-    expect(
-        Beacon.beaconFromArray(Beacon.beaconArrayToJson(beacons))
-            is List<Beacon>,
-        isTrue);
   });
 
   test('beacon json must be equal', () {

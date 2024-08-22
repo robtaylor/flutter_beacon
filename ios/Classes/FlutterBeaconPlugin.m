@@ -1,6 +1,11 @@
 #import "FlutterBeaconPlugin.h"
 #import <CoreBluetooth/CoreBluetooth.h>
-#import <CoreLocation/CoreLocation.h>
+#import <corelocation/CoreLocation.h>
+#import "FBAuthorizationStatusHandler.h"
+#import "FBBluetoothStateHandler.h"
+#import "FBMonitoringStreamHandler.h"
+#import "FBRangingStatusStreamHandler.h"
+#import "FBRangingStreamHandler.h"
 #import "FBUtils.h"
 #import "FBBluetoothStateHandler.h"
 #import "FBRangingStreamHandler.h"

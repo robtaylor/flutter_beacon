@@ -10,10 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^4.0.0
 
 flutter:
   plugin:
@@ -22,4 +24,6 @@ flutter:
         package: com.flutterbeacon
         pluginClass: FlutterBeaconPlugin
       ios:
+        pluginClass: FlutterBeaconPlugin
+      macos:
         pluginClass: FlutterBeaconPlugin
