@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_beacon_example/controller/requirement_state_controller.dart';
 import 'package:get/get.dart';
 
 class TabBroadcasting extends StatefulWidget {
+  TabBroadcasting({super.key});
   @override
   _TabBroadcastingState createState() => _TabBroadcastingState();
 }
@@ -159,8 +159,8 @@ class _TabBroadcastingState extends State<TabBroadcasting> {
 
   Widget get buttonBroadcast {
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-      onPrimary: Colors.white,
-      primary: broadcasting ? Colors.red : Theme.of(context).primaryColor,
+      overlayColor: Colors.white,
+      foregroundColor: broadcasting ? Colors.red : Theme.of(context).primaryColor,
       minimumSize: Size(88, 36),
       padding: EdgeInsets.symmetric(horizontal: 16),
       shape: const RoundedRectangleBorder(
