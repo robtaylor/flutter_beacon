@@ -124,53 +124,54 @@ void main() {
       throw PlatformException(code: 'error', message: 'invalid region ranging');
     });
 
-    monitoringChannel.setMockMethodCallHandler((MethodCall methodCall) async {
-      final args = methodCall.arguments;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(monitoringChannel,
+      (MethodCall methodCall) async {
+        final args = methodCall.arguments;
 
-      if (args is List) {
-        if (args.isEmpty) {
-          throw PlatformException(
-              code: 'error', message: 'region monitoring is empty');
+        if (args is List) {
+          if (args.isEmpty) {
+            throw PlatformException(
+                code: 'error', message: 'region monitoring is empty');
+          }
+          List<Region> regions = args.map((arg) {
+            return Region.fromJson(arg);
+          }).toList();
+
+          for (var region in regions) {
+            dynamic result;
+            if (region.identifier == 'onEnter') {
+              result = {
+                'region': region.toJson,
+                'event': 'didEnterRegion',
+              };
+            } else if (region.identifier == 'onExit') {
+              result = {
+                'region': region.toJson,
+                'event': 'didExitRegion',
+              };
+            } else if (region.identifier == 'onDetermine') {
+              result = {
+                'region': region.toJson,
+                'event': 'didDetermineStateForRegion',
+                'state': 'UNKNOWN',
+              };
+            }
+
+            if (result != null) {
+              TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+                monitoringChannel.name,
+                const StandardMethodCodec().encodeSuccessEnvelope(result),
+                (ByteData? data) {},
+              );
+            }
+          }
+          return;
         }
-        List<Region> regions = args.map((arg) {
-          return Region.fromJson(arg);
-        }).toList();
 
-        regions.forEach((region) {
-          dynamic result;
-          if (region.identifier == 'onEnter') {
-            result = {
-              'region': region.toJson,
-              'event': 'didEnterRegion',
-            };
-          } else if (region.identifier == 'onExit') {
-            result = {
-              'region': region.toJson,
-              'event': 'didExitRegion',
-            };
-          } else if (region.identifier == 'onDetermine') {
-            result = {
-              'region': region.toJson,
-              'event': 'didDetermineStateForRegion',
-              'state': 'UNKNOWN',
-            };
-          }
-
-          if (result != null) {
-            ServicesBinding.instance.defaultBinaryMessenger
-                .handlePlatformMessage(
-              monitoringChannel.name,
-              const StandardMethodCodec().encodeSuccessEnvelope(result),
-              (ByteData? data) {},
-            );
-          }
-        });
-        return;
-      }
-
-      throw PlatformException(
-          code: 'error', message: 'invalid region monitoring');
-    });
+        throw PlatformException(
+            code: 'error', message: 'invalid region monitoring');
+      });
 
     bluetoothChannel.setMockMethodCallHandler((MethodCall methodCall) async {
       ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
