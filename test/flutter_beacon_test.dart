@@ -16,106 +16,110 @@ void main() {
       MethodChannel('flutter_authorization_status_changed');
 
   setUpAll(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      final method = methodCall.method;
-      if (method == 'initialize') {
-        return true;
-      }
+     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel,
+          (MethodCall methodCall) async {
+          final method = methodCall.method;
+          if (method == 'initialize') {
+            return true;
+          }
 
-      if (method == 'initializeAndCheck') {
-        return true;
-      }
+          if (method == 'initializeAndCheck') {
+            return true;
+          }
 
-      if (method == 'authorizationStatus') {
-        return AuthorizationStatus.allowed.value;
-      }
+          if (method == 'authorizationStatus') {
+            return AuthorizationStatus.allowed.value;
+          }
 
-      if (method == 'checkLocationServicesIfEnabled') {
-        return true;
-      }
+          if (method == 'checkLocationServicesIfEnabled') {
+            return true;
+          }
 
-      if (method == 'bluetoothState') {
-        return BluetoothState.stateOn.value;
-      }
+          if (method == 'bluetoothState') {
+            return BluetoothState.stateOn.value;
+          }
 
-      if (method == 'requestAuthorization') {
-        return true;
-      }
+          if (method == 'requestAuthorization') {
+            return true;
+          }
 
-      if (method == 'openBluetoothSettings') {
-        return true;
-      }
+          if (method == 'openBluetoothSettings') {
+            return true;
+          }
 
-      if (method == 'openLocationSettings') {
-        return true;
-      }
+          if (method == 'openLocationSettings') {
+            return true;
+          }
 
-      if (method == 'openApplicationSettings') {
-        return true;
-      }
+          if (method == 'openApplicationSettings') {
+            return true;
+          }
 
-      if (method == 'close') {
-        return true;
-      }
+          if (method == 'close') {
+            return true;
+          }
 
-      if (method == 'isBroadcasting') {
-        return false;
-      }
+          if (method == 'isBroadcasting') {
+            return false;
+          }
 
-      if (method == 'isBroadcastSupported') {
-        return true;
-      }
+          if (method == 'isBroadcastSupported') {
+            return true;
+          }
 
-      if (method == 'setScanPeriod') {
-        return true;
-      }
+          if (method == 'setScanPeriod') {
+            return true;
+          }
 
-      if (method == 'setBetweenScanPeriod') {
-        return true;
-      }
+          if (method == 'setBetweenScanPeriod') {
+            return true;
+          }
 
-      throw MissingPluginException(
-          'No implementation found for method $method on channel ${channel.name}');
-    });
+          throw MissingPluginException(
+              'No implementation found for method $method on channel ${channel.name}');
+        });
 
-    rangingChannel.setMockMethodCallHandler((MethodCall methodCall) async {
-      final args = methodCall.arguments;
-      if (args is List) {
-        if (args.isEmpty) {
-          throw PlatformException(
-              code: 'error', message: 'region ranging is empty');
-        }
-        List<Region> regions = args.map((arg) {
-          return Region.fromJson(arg);
-        }).toList();
+     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(rangingChannel,
+        (MethodCall methodCall) async {
+          final args = methodCall.arguments;
+          if (args is List) {
+            if (args.isEmpty) {
+              throw PlatformException(
+                  code: 'error', message: 'region ranging is empty');
+            }
+            List<Region> regions = args.map((arg) {
+              return Region.fromJson(arg);
+            }).toList();
 
-        ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
-          rangingChannel.name,
-          const StandardMethodCodec().encodeSuccessEnvelope({
-            'region': regions.first.toJson,
-            'beacons': [
-              {
-                'proximityUUID': regions.first.proximityUUID,
-                'major': regions.first.major == null ? 1 : regions.first.major,
-                'minor': regions.first.minor == null ? 1 : regions.first.minor,
-                'rssi': -59,
-                'accuracy': 1.2,
-                'proximity': 'near',
-              },
-              {
-                'proximityUUID': regions.first.proximityUUID,
-                'major': regions.first.major == null ? 2 : regions.first.major,
-                'minor': regions.first.minor == null ? 2 : regions.first.minor,
-                'rssi': -58,
-                'accuracy': 0.8,
-                'proximity': 'immediate',
-              }
-            ]
-          }),
-          (ByteData? data) {},
-        );
-        return;
-      }
+            TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+              rangingChannel.name,
+              const StandardMethodCodec().encodeSuccessEnvelope({
+                'region': regions.first.toJson,
+                'beacons': [
+                  {
+                    'proximityUUID': regions.first.proximityUUID,
+                    'major': regions.first.major == null ? 1 : regions.first.major,
+                    'minor': regions.first.minor == null ? 1 : regions.first.minor,
+                    'rssi': -59,
+                    'accuracy': 1.2,
+                    'proximity': 'near',
+                  },
+                  {
+                    'proximityUUID': regions.first.proximityUUID,
+                    'major': regions.first.major == null ? 2 : regions.first.major,
+                    'minor': regions.first.minor == null ? 2 : regions.first.minor,
+                    'rssi': -58,
+                    'accuracy': 0.8,
+                    'proximity': 'immediate',
+                  }
+                ]
+              }),
+              (ByteData? data) {},
+            );
+            return;
+          }
 
       throw PlatformException(code: 'error', message: 'invalid region ranging');
     });
@@ -153,7 +157,7 @@ void main() {
           }
 
           if (result != null) {
-            ServicesBinding.instance!.defaultBinaryMessenger
+            ServicesBinding.instance.defaultBinaryMessenger
                 .handlePlatformMessage(
               monitoringChannel.name,
               const StandardMethodCodec().encodeSuccessEnvelope(result),
@@ -169,7 +173,7 @@ void main() {
     });
 
     bluetoothChannel.setMockMethodCallHandler((MethodCall methodCall) async {
-      ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
+      ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
         bluetoothChannel.name,
         const StandardMethodCodec().encodeSuccessEnvelope('STATE_ON'),
         (ByteData? data) {},
@@ -178,7 +182,7 @@ void main() {
 
     authorizationChannel
         .setMockMethodCallHandler((MethodCall methodCall) async {
-      ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
+      ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
         authorizationChannel.name,
         const StandardMethodCodec().encodeSuccessEnvelope('ALLOWED'),
         (ByteData? data) {},
