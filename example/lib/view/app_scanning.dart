@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_beacon_example/controller/requirement_state_controller.dart';
 import 'package:get/get.dart';
+import 'package:logging/logging.dart';
 
 class TabScanning extends StatefulWidget {
   const TabScanning({super.key});
@@ -14,10 +15,10 @@ class TabScanning extends StatefulWidget {
 
 class TabScanningState extends State<TabScanning> {
   StreamSubscription<RangingResult>? _streamRanging;
+  final log = Logger('TabScanningState');
   final _regionBeacons = <Region, List<Beacon>>{};
   final _beacons = <Beacon>[];
   final controller = Get.find<RequirementStateController>();
-
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,7 @@ class TabScanningState extends State<TabScanning> {
     if (!controller.authorizationStatusOk ||
         !controller.locationServiceEnabled ||
         !controller.bluetoothEnabled) {
-      print(
+      log.info(
           'RETURNED, authorizationStatusOk=${controller.authorizationStatusOk}, '
           'locationServiceEnabled=${controller.locationServiceEnabled}, '
           'bluetoothEnabled=${controller.bluetoothEnabled}');
@@ -66,7 +67,7 @@ class TabScanningState extends State<TabScanning> {
 
     _streamRanging =
         flutterBeacon.ranging(regions).listen((RangingResult result) {
-      print(result);
+      log.info(result);
       if (mounted) {
         setState(() {
           _regionBeacons[result.region] = result.beacons;

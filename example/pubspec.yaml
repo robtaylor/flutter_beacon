@@ -12,6 +12,7 @@ dependencies:
   flutter_beacon:
     path: ../
   get: ^4.6.6
+  logging: ^1.2.0
 
 dev_dependencies:
   integration_test:

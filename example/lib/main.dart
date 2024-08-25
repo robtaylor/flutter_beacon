@@ -1,9 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_beacon_example/controller/requirement_state_controller.dart';
 import 'package:flutter_beacon_example/view/home_page.dart';
 import 'package:get/get.dart';
+import 'package:logging/logging.dart';
 
 void main() {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+  if (kDebugMode) {
+    debugPrint('${record.level.name}: ${record.time}: ${record.message}');
+  }
+  });
   runApp(const MainApp());
 }
 
