@@ -8,6 +8,7 @@ import 'package:flutter_beacon_example/controller/requirement_state_controller.d
 import 'package:flutter_beacon_example/view/app_broadcasting.dart';
 import 'package:flutter_beacon_example/view/app_scanning.dart';
 import 'package:get/get.dart';
+import 'package:logging/logging.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  final log = Logger('HomePageState');
   final controller = Get.find<RequirementStateController>();
   StreamSubscription<BluetoothState>? _streamBluetooth;
   int currentIndex = 0;
@@ -30,7 +32,7 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   listeningState() async {
-    print('Listening to bluetooth state');
+    log.info('Listening to bluetooth state');
     _streamBluetooth = flutterBeacon
         .bluetoothStateChanged()
         .listen((BluetoothState state) async {
@@ -42,37 +44,37 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
   checkAllRequirements() async {
     final bluetoothState = await flutterBeacon.bluetoothState;
     controller.updateBluetoothState(bluetoothState);
-    print('BLUETOOTH $bluetoothState');
+    log.info('BLUETOOTH $bluetoothState');
 
     final authorizationStatus = await flutterBeacon.authorizationStatus;
     controller.updateAuthorizationStatus(authorizationStatus);
-    print('AUTHORIZATION $authorizationStatus');
+    log.info('AUTHORIZATION $authorizationStatus');
 
     final locationServiceEnabled =
         await flutterBeacon.checkLocationServicesIfEnabled;
     controller.updateLocationService(locationServiceEnabled);
-    print('LOCATION SERVICE $locationServiceEnabled');
+    log.info('LOCATION SERVICE $locationServiceEnabled');
 
     if (controller.bluetoothEnabled &&
         controller.authorizationStatusOk &&
         controller.locationServiceEnabled) {
-      print('STATE READY');
+      log.info('STATE READY');
       if (currentIndex == 0) {
-        print('SCANNING');
+        log.info('SCANNING');
         controller.startScanning();
       } else {
-        print('BROADCASTING');
+        log.info('BROADCASTING');
         controller.startBroadcasting();
       }
     } else {
-      print('STATE NOT READY');
+      log.info('STATE NOT READY');
       controller.pauseScanning();
     }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    print('AppLifecycleState = $state');
+    log.info('AppLifecycleState = $state');
     if (state == AppLifecycleState.resumed) {
       if (_streamBluetooth != null) {
         if (_streamBluetooth!.isPaused) {
@@ -100,15 +102,16 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
         centerTitle: false,
         actions: <Widget>[
           Obx(() {
-            if (!controller.locationServiceEnabled)
+            if (!controller.locationServiceEnabled) {
               return IconButton(
                 tooltip: 'Not Determined',
                 icon: const Icon(Icons.portable_wifi_off),
                 color: Colors.grey,
                 onPressed: () {},
               );
+            }
 
-            if (!controller.authorizationStatusOk)
+            if (!controller.authorizationStatusOk) {
               return IconButton(
                 tooltip: 'Not Authorized',
                 icon: const Icon(Icons.portable_wifi_off),
@@ -117,6 +120,7 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   await flutterBeacon.requestAuthorization;
                 },
               );
+            }
 
             return IconButton(
               tooltip: 'Authorized',
@@ -176,9 +180,9 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
       body: IndexedStack(
         index: currentIndex,
-        children: [
-          const TabScanning(),
-          const TabBroadcasting(),
+        children: const [
+          TabScanning(),
+          TabBroadcasting(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -195,12 +199,12 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
             controller.startBroadcasting();
           }
         },
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'Scan',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.bluetooth_audio),
             label: 'Broadcast',
           ),
@@ -238,7 +242,7 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
       try {
         await flutterBeacon.openBluetoothSettings;
       } on PlatformException catch (e) {
-        print(e);
+        log.info(e);
       }
     } else if (Platform.isIOS) {
       await showDialog(

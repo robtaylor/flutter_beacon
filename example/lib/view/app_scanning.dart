@@ -72,9 +72,9 @@ class TabScanningState extends State<TabScanning> {
         setState(() {
           _regionBeacons[result.region] = result.beacons;
           _beacons.clear();
-          _regionBeacons.values.forEach((list) {
+          for (var list in _regionBeacons.values) {
             _beacons.addAll(list);
-          });
+          }
           _beacons.sort(_compareParameters);
         });
       }
@@ -125,24 +125,24 @@ class TabScanningState extends State<TabScanning> {
                         beacon.proximityUUID,
                         style: const TextStyle(fontSize: 15.0),
                       ),
-                      subtitle: new Row(
+                      subtitle: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
                             child: Text(
                               'Major: ${beacon.major}\nMinor: ${beacon.minor}',
                               style: const TextStyle(fontSize: 13.0),
                             ),
-                            flex: 1,
-                            fit: FlexFit.tight,
                           ),
                           Flexible(
+                            flex: 2,
+                            fit: FlexFit.tight,
                             child: Text(
                               'Accuracy: ${beacon.accuracy}m\nRSSI: ${beacon.rssi}',
                               style: const TextStyle(fontSize: 13.0),
                             ),
-                            flex: 2,
-                            fit: FlexFit.tight,
                           )
                         ],
                       ),
