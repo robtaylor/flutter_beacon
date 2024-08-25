@@ -173,30 +173,33 @@ void main() {
             code: 'error', message: 'invalid region monitoring');
       });
 
-    bluetoothChannel.setMockMethodCallHandler((MethodCall methodCall) async {
-      ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
-        bluetoothChannel.name,
-        const StandardMethodCodec().encodeSuccessEnvelope('STATE_ON'),
-        (ByteData? data) {},
-      );
-    });
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(bluetoothChannel, (MethodCall methodCall) async {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+          bluetoothChannel.name,
+          const StandardMethodCodec().encodeSuccessEnvelope('STATE_ON'),
+          (ByteData? data) {},
+        );
+        return;
+      });
 
-    authorizationChannel
-        .setMockMethodCallHandler((MethodCall methodCall) async {
-      ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(authorizationChannel, (MethodCall methodCall) async {
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
         authorizationChannel.name,
         const StandardMethodCodec().encodeSuccessEnvelope('ALLOWED'),
         (ByteData? data) {},
       );
+      return;
     });
   });
 
   tearDownAll(() {
-    channel.setMockMethodCallHandler(null);
-    rangingChannel.setMockMethodCallHandler(null);
-    monitoringChannel.setMockMethodCallHandler(null);
-    bluetoothChannel.setMockMethodCallHandler(null);
-    authorizationChannel.setMockMethodCallHandler(null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(rangingChannel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(monitoringChannel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(bluetoothChannel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(authorizationChannel, null);
   });
 
   group('Method channel', () {
