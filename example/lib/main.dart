@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_beacon_example/controller/requirement_state_controller.dart';
 import 'package:flutter_beacon_example/view/home_page.dart';
 import 'package:get/get.dart';
 
 void main() {
-  runApp(MainApp());
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     Get.put(RequirementStateController());
 
     final themeData = Theme.of(context);
-    final primary = Colors.blue;
+    const primary = Colors.blue;
 
     return GetMaterialApp(
       theme: ThemeData(
@@ -40,7 +41,7 @@ class MainApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: primary,
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
