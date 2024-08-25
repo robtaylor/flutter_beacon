@@ -113,7 +113,7 @@ class TabScanningState extends State<TabScanning> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _beacons.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView(
               children: ListTile.divideTiles(
                 context: context,
@@ -122,7 +122,7 @@ class TabScanningState extends State<TabScanning> {
                     return ListTile(
                       title: Text(
                         beacon.proximityUUID,
-                        style: TextStyle(fontSize: 15.0),
+                        style: const TextStyle(fontSize: 15.0),
                       ),
                       subtitle: new Row(
                         mainAxisSize: MainAxisSize.max,
@@ -130,7 +130,7 @@ class TabScanningState extends State<TabScanning> {
                           Flexible(
                             child: Text(
                               'Major: ${beacon.major}\nMinor: ${beacon.minor}',
-                              style: TextStyle(fontSize: 13.0),
+                              style: const TextStyle(fontSize: 13.0),
                             ),
                             flex: 1,
                             fit: FlexFit.tight,
@@ -138,7 +138,7 @@ class TabScanningState extends State<TabScanning> {
                           Flexible(
                             child: Text(
                               'Accuracy: ${beacon.accuracy}m\nRSSI: ${beacon.rssi}',
-                              style: TextStyle(fontSize: 13.0),
+                              style: const TextStyle(fontSize: 13.0),
                             ),
                             flex: 2,
                             fit: FlexFit.tight,
