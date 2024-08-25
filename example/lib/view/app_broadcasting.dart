@@ -5,12 +5,12 @@ import 'package:flutter_beacon_example/controller/requirement_state_controller.d
 import 'package:get/get.dart';
 
 class TabBroadcasting extends StatefulWidget {
-  TabBroadcasting({super.key});
+  const TabBroadcasting({super.key});
   @override
-  _TabBroadcastingState createState() => _TabBroadcastingState();
+  TabBroadcastingState createState() => TabBroadcastingState();
 }
 
-class _TabBroadcastingState extends State<TabBroadcasting> {
+class TabBroadcastingState extends State<TabBroadcasting> {
   final controller = Get.find<RequirementStateController>();
   final clearFocus = FocusNode();
   bool broadcasting = false;

@@ -6,11 +6,13 @@ import 'package:flutter_beacon_example/controller/requirement_state_controller.d
 import 'package:get/get.dart';
 
 class TabScanning extends StatefulWidget {
+  const TabScanning({super.key});
+
   @override
-  _TabScanningState createState() => _TabScanningState();
+  TabScanningState createState() => TabScanningState();
 }
 
-class _TabScanningState extends State<TabScanning> {
+class TabScanningState extends State<TabScanning> {
   StreamSubscription<RangingResult>? _streamRanging;
   final _regionBeacons = <Region, List<Beacon>>{};
   final _beacons = <Beacon>[];
