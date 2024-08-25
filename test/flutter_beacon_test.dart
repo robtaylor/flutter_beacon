@@ -100,16 +100,16 @@ void main() {
                 'beacons': [
                   {
                     'proximityUUID': regions.first.proximityUUID,
-                    'major': regions.first.major == null ? 1 : regions.first.major,
-                    'minor': regions.first.minor == null ? 1 : regions.first.minor,
+                    'major': regions.first.major ?? 1,
+                    'minor': regions.first.minor ?? 1,
                     'rssi': -59,
                     'accuracy': 1.2,
                     'proximity': 'near',
                   },
                   {
                     'proximityUUID': regions.first.proximityUUID,
-                    'major': regions.first.major == null ? 2 : regions.first.major,
-                    'minor': regions.first.minor == null ? 2 : regions.first.minor,
+                    'major': regions.first.major ?? 2,
+                    'minor': regions.first.minor ?? 2,
                     'rssi': -58,
                     'accuracy': 0.8,
                     'proximity': 'immediate',
