@@ -342,7 +342,7 @@ void main() {
     });
 
     test('didEnterRegion', () async {
-      final result = await stream.first;
+      final result = await stream.elementAt(0);
 
       expect(result.region, isNotNull);
       expect(result.region.identifier, 'onEnter');
@@ -355,7 +355,7 @@ void main() {
     });
 
     test('didExitRegion', () async {
-      final result = await stream.elementAt(2);
+      final result = await stream.elementAt(1);
 
       expect(result.region, isNotNull);
       expect(result.region.identifier, 'onExit');
@@ -368,7 +368,7 @@ void main() {
     });
 
     test('didDetermineStateForRegion', () async {
-      final result = await stream.elementAt(3);
+      final result = await stream.elementAt(2);
 
       expect(result.region, isNotNull);
       expect(result.region.identifier, 'onDetermine');
